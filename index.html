@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Học Từ Vựng Tiếng Anh</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 380px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        button {
+            margin-top: 12px;
+            padding: 8px 14px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .correct { color: green; }
+        .wrong { color: red; }
+
+        .answer {
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Học từ vựng</h2>
+    <p id="vietnamese"></p>
+
+    <input type="text" id="answer" placeholder="Nhập tiếng Anh..." />
+
+    <div class="result" id="result"></div>
+    <div class="answer" id="showAnswer"></div>
+
+    <button onclick="revealAnswer()">👀 Hiện đáp án</button>
+    <br>
+    <button onclick="nextWord()">Next ➡️</button>
+</div>
+
+<script>
+    const words = [
+
+  { vi: "Kế toán", en: "accountant" },
+  { vi: "Ứng viên", en: "applicant" },
+  { vi: "Người phục vụ", en: "attendant" },
+  { vi: "Tờ gấp quảng cáo", en: "brochure" },
+  { vi: "Quán ăn tự phục vụ", en: "cafeteria" },
+  { vi: "Ứng cử viên", en: "candidate" },
+  { vi: "Nhân viên bán hàng (quầy)", en: "clerk" },
+  { vi: "Khách hàng", en: "client" },
+  { vi: "Cái khăn / vải", en: "cloth" },
+  { vi: "Hội nghị / hội thảo", en: "conference" },
+  { vi: "Khu trung tâm thành phố", en: "downtown" },
+  { vi: "Thang máy", en: "elevator" },
+  { vi: "Bao quanh / vây quanh", en: "enclose" },
+  { vi: "Tiền vé, tiền xe", en: "fare" },
+  { vi: "Máy fax", en: "fax" },
+  { vi: "Hàng hóa / mặt hàng", en: "goods" },
+  { vi: "Suy ra / kết luận", en: "infer" },
+  { vi: "Hóa đơn", en: "invoice" },
+  { vi: "Thuê", en: "lease" },
+  { vi: "Sảnh", en: "lobby" },
+  { vi: "Hành lý", en: "luggage" },
+  { vi: "Giấy ghi chú", en: "memo" },
+  { vi: "Thông báo", en: "notify" },
+  { vi: "Sự xem trước", en: "preview" },
+  { vi: "Xuất bản / công bố", en: "publish" },
+  { vi: "Hóa đơn / biên lai", en: "receipt" },
+  { vi: "Sự đón tiếp", en: "reception" },
+  { vi: "Hoàn tiền", en: "refund" },
+  { vi: "Sự cho thuê", en: "rental" },
+  { vi: "Sự đặt trước", en: "reservation" },
+  { vi: "Nghiên cứu khoa học", en: "seminar" },
+  { vi: "Chân thành", en: "sincerely" },
+  { vi: "Sự đăng ký", en: "subscription" },
+  { vi: "Đường hầm / tàu điện ngầm", en: "subway" },
+  { vi: "Người giám sát", en: "supervisor" },
+  { vi: "Kỹ thuật viên", en: "technician" },
+  { vi: "Sự bảo hành", en: "warranty" }
+
+    ];
+
+    let remainingWords = [...words];
+    let currentWord = null;
+
+    const viText = document.getElementById("vietnamese");
+    const input = document.getElementById("answer");
+    const result = document.getElementById("result");
+    const showAnswerText = document.getElementById("showAnswer");
+
+    function loadWord() {
+        if (remainingWords.length === 0) {
+            viText.textContent = "🎉 Bạn đã học xong tất cả từ!";
+            input.disabled = true;
+            return;
+        }
+
+        const randomIndex = Math.floor(Math.random() * remainingWords.length);
+        currentWord = remainingWords[randomIndex];
+
+        // xóa từ đã chọn khỏi danh sách
+        remainingWords.splice(randomIndex, 1);
+
+        viText.textContent = "Tiếng Việt: " + currentWord.vi;
+        input.value = "";
+        result.textContent = "";
+        showAnswerText.textContent = "";
+        input.style.border = "1px solid #ccc";
+        input.focus();
+    }
+
+    function checkAnswer() {
+    if (!currentWord) return;
+
+    const userInput = input.value.trim().toLowerCase();
+    const correct = currentWord.en.toLowerCase();
+
+    if (userInput === "") return;
+
+    if (userInput === correct) {
+        result.textContent = "Đúng ✅";
+        result.className = "result correct";
+        input.style.border = "2px solid green";
+
+        // 2 giây sau chuyển sang từ mới
+        setTimeout(() => {
+            loadWord();
+        }, 2000);
+    } else {
+        result.textContent = "Sai ❌";
+        result.className = "result wrong";
+        input.style.border = "2px solid red";
+    }
+}
+
+
+    function revealAnswer() {
+        showAnswerText.textContent = "Đáp án: " + currentWord.en;
+    }
+
+    function nextWord() {
+        loadWord();
+    }
+    input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+        checkAnswer();
+    }
+});
+
+
+    loadWord();
+</script>
+
+</body>
+</html>
